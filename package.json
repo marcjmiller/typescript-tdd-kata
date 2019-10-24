@@ -1,0 +1,28 @@
+{
+  "name": "typescript-tdd-kata",
+  "version": "1.0.0",
+  "description": "a quick repo for initializing an environment to practice TDD w/ Typescript",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "jest --watchAll --env=jsdom",
+    "coverage": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcjmiller/typescript-tdd-kata.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcjmiller/typescript-tdd-kata/issues"
+  },
+  "homepage": "https://github.com/marcjmiller/typescript-tdd-kata#readme",
+  "devDependencies": {
+    "@types/jest": "^24.0.19",
+    "@types/node": "^12.11.6",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
+  }
+}
