@@ -1,4 +1,4 @@
-import helloWorld from "../app";
+import helloWorld from "../helloworld";
 
 describe('App tests go in here', () => {
     it('should return "Hello World!"', () => {
