@@ -1,9 +1,6 @@
 # deps
 node_modules
 
-# testing
-src/__tests__
-
 # idea files
 .idea
 *.iml
