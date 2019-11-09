@@ -7,37 +7,31 @@ export default class FoxGooseBagOfCorn {
     return this._westBank.sort();
   }
 
-  set westBank(value: string[]) {
-    this._westBank = value;
-  }
-
   get eastBank(): string[] {
     return this._eastBank.sort();
-  }
-
-  set eastBank(value: string[]) {
-    this._eastBank = value;
   }
 
   get isSafe(): boolean {
     return this._isSafe;
   }
 
-  set isSafeToggle(value: boolean) {
-    this._isSafe = !this._isSafe;
+  set isSafe(value: boolean) {
+    this._isSafe = value;
   }
 
-  moveAcross(mover?: string): boolean {
-    let fromLocation: string[] = this.eastBank.includes('you') ? this.eastBank : this.westBank;
-    let toLocation: string[] = !this.eastBank.includes('you') ? this.eastBank : this.westBank;
 
-    FoxGooseBagOfCorn.boatAcross(fromLocation, toLocation, mover);
-    this.checkSafety(fromLocation);
-
+  boatAcross(mover?: string): boolean {
+    const [fromLocation, toLocation] = this.getLocs();
+    FoxGooseBagOfCorn._boatAcross(fromLocation, toLocation, mover);
+    this.checkIfUnsafe(fromLocation);
     return this.isSafe;
   }
 
-  private static boatAcross(fromLocation: string[], toLocation: string[], mover?: string) {
+  private getLocs(): string[][] {
+    return this.eastBank.includes('you') ? [this.eastBank, this.westBank] : [this.westBank, this.eastBank];
+  }
+
+  private static _boatAcross(fromLocation: string[], toLocation: string[], mover?: string): void {
     fromLocation.splice(fromLocation.indexOf('you'), 1);
     toLocation.push('you');
     if (mover) {
@@ -46,10 +40,23 @@ export default class FoxGooseBagOfCorn {
     }
   }
 
-  checkSafety(locationToCheck: string[]) {
-    if (locationToCheck.includes('fox') && locationToCheck.includes('goose') ||
-      locationToCheck.includes('corn') && locationToCheck.includes('goose')) {
-      this.isSafeToggle;
+  checkIfUnsafe(locationToCheck: string[]): void {
+    if (FoxGooseBagOfCorn.isUnsafe(locationToCheck)) {
+      console.log('You have failed to solve the riddle!');
+      this.isSafe = false;
     }
+  }
+
+  private static isUnsafe(locationToCheck: string[]): boolean {
+    return locationToCheck.includes('fox') && locationToCheck.includes('goose') ||
+      locationToCheck.includes('corn') && locationToCheck.includes('goose');
+  }
+
+  completedRiddle(): boolean {
+    if (this.eastBank.length == 4) {
+      console.log('Congrats! You solved the riddle!');
+      return true;
+    }
+    return false;
   }
 }
