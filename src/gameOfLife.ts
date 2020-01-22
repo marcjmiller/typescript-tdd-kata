@@ -1,53 +1,71 @@
-// 1. Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
-// 2. Any live cell with more than three live neighbours dies, as if by overcrowding.
-// 3. Any live cell with two or three live neighbours lives on to the next generation.
-// 4. Any dead cell with exactly three live neighbours becomes a live cell.
 
+// 1. Any live cell with two or three neighbors survives.
+// 2. Any dead cell with three live neighbors becomes a live cell.
+// 3. All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
-class GameOfLife {
-  calculateNextGen(grid: number[][]) {
-    let neighbors;
-    let nextGen: number[][] = Array(grid.length);
-    let bufferedGrid: number[][];
-    let bufferedHeight = grid.length + 2;
-    let bufferedWidth = grid[0].length + 2;
+export enum Cell {
+  LIVE = 1,
+  DEAD = 0
+}
 
-    bufferedGrid = Array(bufferedHeight).fill(Array(bufferedWidth).fill(0));
-    console.log(bufferedGrid);
+export class GameOfLife {
 
-    for (let i = 1; i < bufferedHeight - 1; i++) {
-      bufferedGrid[i] = [0].concat(grid[i - 1]).concat([0]);
-      console.log(grid[i - 1]);
-    }
-    console.log(bufferedGrid);
+  static calcNextGen(board: Cell[][]): Cell[][] {
+    let nextGen: Cell [][];
+    let rows: number = board.length;
+    let cols: number = board[0].length;
 
-    for (let i = 1; i < bufferedHeight - 1; i++) {
-      nextGen[i - 1] = Array(grid[0].length);
-      for (let j = 1; j < bufferedWidth - 1; j++) {
-        neighbors = GameOfLife.countNeighbors(bufferedGrid, i, j);
-        if (bufferedGrid[i][j] === 1)
-          nextGen[i - 1][j - 1] = (neighbors === 2 || neighbors === 3  ? 1 : 0);
-        else
-          nextGen[i - 1][j - 1] = (neighbors === 3  ? 1 : 0);
+    nextGen = Array(rows).fill(Cell.DEAD);
+    for (let i = 0; i < rows; i++)
+      nextGen[i] = Array(cols).fill(Cell.DEAD);
+
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < cols; j++) {
+
+        let neighbors: number = this.calcNeighbors(i, rows, j, cols, board);
+
+        if(board[i][j] === Cell.LIVE) {
+          if(neighbors === 2 || neighbors === 3) {
+            nextGen[i][j] = Cell.LIVE;
+          }
+        } else {
+          if (neighbors === 3) {
+            nextGen[i][j] = Cell.LIVE;
+          }
+        }
 
       }
     }
-    console.log(nextGen);
+
     return nextGen;
   }
 
-  private static countNeighbors(grid: number[][], i: number, j: number): number {
-    return (
-      grid[i - 1][j - 1] +
-      grid[i - 1][j] +
-      grid[i - 1][j + 1] +
-      grid[i][j - 1] +
-      grid[i][j + 1] +
-      grid[i + 1][j - 1] +
-      grid[i + 1][j] +
-      grid[i + 1][j + 1]
-    );
+  private static calcNeighbors(i: number, rows: number, j: number, cols: number, board: number[][]): number {
+    let neighbors: number = 0;
+    for (let x = -1; x <= 1; x++) {
+      for (let y = -1; y <= 1; y++) {
+        if (
+          !(x === 0 && y === 0) &&
+          (i + x) >= 0 &&
+          (i + x) < rows &&
+          (j + y) >= 0 &&
+          (j + y) < cols
+        ) {
+          neighbors += board[i + x][j + y];
+        }
+      }
+    }
+    return neighbors;
+  }
+
+  public static printBoard(board: Cell[][]): string {
+    let printOut = "";
+    for (let y = 0; y < board.length; y++){
+      for (let x = 0; x < board[y].length; x++) {
+        printOut += board[y][x];
+      }
+      printOut += "\n";
+    }
+    return printOut;
   }
 }
-
-export default GameOfLife;
