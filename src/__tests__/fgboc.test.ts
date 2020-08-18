@@ -1,4 +1,4 @@
-import fgboc from '../fgboc';
+import fgboc, { Passenger } from '../fgboc';
 
 // The rules for this puzzle are:
 //
@@ -15,75 +15,75 @@ describe('fgboc kata', () => {
   let fgbc: fgboc = new fgboc();
 
   it('should initialize properly', () => {
-    expect(fgbc.northBank).toEqual(['corn', 'fox', 'goose', 'you']);
+    expect(fgbc.northBank).toEqual([Passenger.CORN, Passenger.FOX, Passenger.GOOSE, Passenger.YOU]);
     expect(fgbc.southBank).toEqual([]);
   });
 
   it('should get a list of valid moves', () => {
     let validMoves = fgbc.getValidMoves();
 
-    expect(validMoves).toEqual(['goose']);
+    expect(validMoves).toEqual([Passenger.GOOSE]);
   });
 
   it('should be able to make the first valid move', () => {
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['corn', 'fox']);
-    expect(fgbc.southBank).toEqual(['goose', 'you']);
+    expect(fgbc.northBank).toEqual([Passenger.CORN, Passenger.FOX]);
+    expect(fgbc.southBank).toEqual([Passenger.GOOSE, Passenger.YOU]);
   });
 
   it('should get the next valid move after the first move is completed', () => {
     let validMoves = fgbc.getValidMoves();
 
-    expect(validMoves).toEqual(['you']);
+    expect(validMoves).toEqual([Passenger.YOU]);
   });
 
   it('should make the next valid move', () => {
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['corn', 'fox', 'you']);
-    expect(fgbc.southBank).toEqual(['goose']);
+    expect(fgbc.northBank).toEqual([Passenger.CORN, Passenger.FOX, Passenger.YOU]);
+    expect(fgbc.southBank).toEqual([Passenger.GOOSE]);
   });
 
   it('should get the next valid move and make it', () => {
     let validMoves = fgbc.getValidMoves();
 
-    expect(validMoves).toEqual(['corn', 'fox']);
+    expect(validMoves).toEqual([Passenger.CORN, Passenger.FOX]);
 
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['fox']);
-    expect(fgbc.southBank).toEqual(['corn', 'goose', 'you']);
+    expect(fgbc.northBank).toEqual([Passenger.FOX]);
+    expect(fgbc.southBank).toEqual([Passenger.CORN, Passenger.GOOSE, Passenger.YOU]);
   });
 
   it('should get the next valid move and make it again until complete', () => {
     let validMoves = fgbc.getValidMoves();
 
-    expect(validMoves).toEqual(['goose']);
+    expect(validMoves).toEqual([Passenger.GOOSE]);
 
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['fox', 'goose', 'you']);
-    expect(fgbc.southBank).toEqual(['corn']);
+    expect(fgbc.northBank).toEqual([Passenger.FOX, Passenger.GOOSE, Passenger.YOU]);
+    expect(fgbc.southBank).toEqual([Passenger.CORN]);
 
     validMoves = fgbc.getValidMoves();
 
-    expect(validMoves).toEqual(['fox']);
+    expect(validMoves).toEqual([Passenger.FOX]);
 
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['goose']);
-    expect(fgbc.southBank).toEqual(['corn', 'fox', 'you']);
+    expect(fgbc.northBank).toEqual([Passenger.GOOSE]);
+    expect(fgbc.southBank).toEqual([Passenger.CORN, Passenger.FOX, Passenger.YOU]);
 
     fgbc.move(fgbc.getValidMoves()[0]);
 
-    expect(fgbc.northBank).toEqual(['goose', 'you']);
-    expect(fgbc.southBank).toEqual(['corn', 'fox']);
+    expect(fgbc.northBank).toEqual([Passenger.GOOSE, Passenger.YOU]);
+    expect(fgbc.southBank).toEqual([Passenger.CORN, Passenger.FOX]);
 
     fgbc.move(fgbc.getValidMoves()[0]);
 
     expect(fgbc.northBank).toEqual([]);
-    expect(fgbc.southBank).toEqual(['corn', 'fox', 'goose', 'you']);
+    expect(fgbc.southBank).toEqual([Passenger.CORN, Passenger.FOX, Passenger.GOOSE, Passenger.YOU]);
   });
 
   it('should solve the riddle in a single call, letting you know the moves as it makes them', () => {
@@ -91,6 +91,6 @@ describe('fgboc kata', () => {
 
     let solution = fgbc.solve();
 
-    expect(solution).toEqual(['goose', 'you', 'corn', 'goose', 'fox', 'you', 'goose']);
+    expect(solution).toEqual([Passenger.GOOSE, Passenger.YOU, Passenger.CORN, Passenger.GOOSE, Passenger.FOX, Passenger.YOU, Passenger.GOOSE]);
   });
 });

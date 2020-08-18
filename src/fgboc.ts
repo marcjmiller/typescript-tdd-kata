@@ -1,31 +1,31 @@
 export default class fgboc {
 
-  private _northBank: string[];
-  private _southBank: string[];
+  private _northBank: Passenger[];
+  private _southBank: Passenger[];
   public lastMove: string;
 
   constructor() {
-    this._northBank = ['corn', 'fox', 'goose', 'you'];
+    this._northBank = [Passenger.CORN, Passenger.FOX, Passenger.GOOSE, Passenger.YOU];
     this._southBank = [];
     this.lastMove = '';
   }
 
-  get northBank(): string[] {
+  get northBank(): Passenger[] {
     return this._northBank.sort();
   }
 
-  get southBank(): string[] {
+  get southBank(): Passenger[] {
     return this._southBank.sort();
   }
 
-  getValidMoves(): string[] {
-    let validMoves: string[] = [];
-    let imOnSouthShore: boolean = this.southBank.includes('you');
-    let passengers: string[] = Array.from(this.northBank.includes('you') ? this.northBank : this.southBank)
-      .filter(passenger => passenger !== 'you');
+  getValidMoves(): Passenger[] {
+    let validMoves: Passenger[] = [];
+    let imOnSouthShore: boolean = this.southBank.includes(Passenger.YOU);
+    let passengers: Passenger[] = Array.from(this.northBank.includes(Passenger.YOU) ? this.northBank : this.southBank)
+      .filter(passenger => passenger !== Passenger.YOU);
 
-    if (imOnSouthShore && this.checkValidMove('you')) {
-      validMoves.push('you');
+    if (imOnSouthShore && this.checkValidMove(Passenger.YOU)) {
+      validMoves.push(Passenger.YOU);
     }
 
     for (let passenger of passengers) {
@@ -37,35 +37,35 @@ export default class fgboc {
     return validMoves;
   }
 
-  checkValidMove(passenger: string): boolean {
-    let myShore = Array.from(this.northBank.includes('you') ? this.northBank : this.southBank);
-    myShore.splice(myShore.indexOf('you'), 1);
+  checkValidMove(passenger: Passenger): boolean {
+    let myShore = Array.from(this.northBank.includes(Passenger.YOU) ? this.northBank : this.southBank);
+    myShore.splice(myShore.indexOf(Passenger.YOU), 1);
 
-    if (passenger !== 'you') {
+    if (passenger !== Passenger.YOU) {
       myShore.splice(myShore.indexOf(passenger), 1);
     }
 
-    return !(myShore.includes('fox') && myShore.includes('goose') ||
-      myShore.includes('corn') && myShore.includes('goose') ||
-      myShore.includes('fox') && myShore.includes('goose') && myShore.includes('corn'));
+    return !(myShore.includes(Passenger.FOX) && myShore.includes(Passenger.GOOSE) ||
+      myShore.includes(Passenger.CORN) && myShore.includes(Passenger.GOOSE) ||
+      myShore.includes(Passenger.FOX) && myShore.includes(Passenger.GOOSE) && myShore.includes(Passenger.CORN));
   }
 
-  move(passenger: string) {
-    let myShore = this._northBank.includes('you') ? this._northBank : this._southBank;
+  move(passenger: Passenger) {
+    let myShore = this._northBank.includes(Passenger.YOU) ? this._northBank : this._southBank;
     let otherShore = myShore === this._northBank ? this._southBank : this._northBank;
 
     if (myShore.includes(passenger) && this.checkValidMove(passenger)) {
       this.lastMove = passenger;
       this.moveSelf(myShore, otherShore);
 
-      if (passenger !== 'you') {
+      if (passenger !== Passenger.YOU) {
         this.movePassenger(myShore, passenger, otherShore);
       }
     }
   }
 
-  solve(): string[] {
-    let movesList: string[] = [];
+  solve(): Passenger[] {
+    let movesList: Passenger[] = [];
     while (this.northBank.length > 0) {
       console.log(
         `North Bank: [${this.northBank}], South Bank: [${this.southBank}], \nBest choice to move: ${this.getValidMoves()[0]}`);
@@ -74,19 +74,26 @@ export default class fgboc {
     return movesList;
   }
 
-  private moveSelf(myShore: string[], otherShore: string[]): void {
-    myShore.splice(myShore.indexOf('you'), 1);
-    otherShore.push('you');
+  private moveSelf(myShore: Passenger[], otherShore: Passenger[]): void {
+    myShore.splice(myShore.indexOf(Passenger.YOU), 1);
+    otherShore.push(Passenger.YOU);
   }
 
-  private movePassenger(myShore: string[], passenger: string, otherShore: string[]): void {
+  private movePassenger(myShore: Passenger[], passenger: Passenger, otherShore: Passenger[]): void {
     myShore.splice(myShore.indexOf(passenger), 1);
     otherShore.push(passenger);
   }
 
-  private makeNextMove(): string {
+  private makeNextMove(): Passenger {
     let nextMove = this.getValidMoves()[0];
     this.move(nextMove);
     return nextMove;
   }
+}
+
+export enum Passenger {
+  FOX = 'Fox',
+  GOOSE = 'Goose',
+  CORN = 'Corn',
+  YOU = 'You'
 }
