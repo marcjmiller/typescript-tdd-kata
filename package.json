@@ -4,7 +4,8 @@
   "description": "a quick repo for initializing an environment to practice TDD w/ Typescript",
   "main": "build/index.js",
   "scripts": {
-    "test": "jest --watchAll --env=jsdom",
+    "test": "jest",
+    "rpa": "jest set",
     "coverage": "jest --coverage"
   },
   "repository": {
