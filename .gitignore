@@ -5,6 +5,10 @@ node_modules
 .idea
 *.iml
 
+# vscode stuff
+.history
+
+
 # production
 build
 
