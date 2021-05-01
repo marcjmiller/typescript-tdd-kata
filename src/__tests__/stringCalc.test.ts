@@ -55,46 +55,35 @@ M
 import { StringCalc } from "../stringCalc";
 
 describe("String calculator", () => {
-  let stringCalc: StringCalc;
-  
-  beforeEach(() => {
-    stringCalc = new StringCalc();
+  const sc = new StringCalc();
+
+  it("should take in no input and return a number", () => {
+    expect(sc.add()).toEqual(0);
   });
 
-  it("should take an empty string", () => {
-    const result = stringCalc.add("");
-    expect(result).toBe(0);
+  it("should take in a string with one input and return a number", () => {
+    expect(sc.add("2")).toEqual(2);
   });
 
-  it("should return the value when passed only one", () => {
-    const result = stringCalc.add("1");
-    expect(result).toBe(1);
-  });
-
-  it("should add a string with 2 values", () => {
-    const result = stringCalc.add("1,2");
-    expect(result).toBe(3);
-  });
-
-  it('should add a string with a baggilion #s', () => {
-    const result = stringCalc.add("1,2,3,4");
-    expect(result).toBe(10);
-  })
-
-  it('should handle new lines and commas', () => {
-    const result = stringCalc.add("1,2\n3,4");
-    expect(result).toBe(10);
-    
-  })
-
-  it('should support custom delimiters outline by //', () => {
-    const result = stringCalc.add("//;\n1;2");
-    expect(result).toBe(3);
-    
+  it('should take in two number in a string and return the sum', () => {
+    expect(sc.add("2,3")).toEqual(5);
   })
   
+  it('should in multiple number in a string and return the sum', () => {
+    expect(sc.add("1,2,3,4")).toEqual(10);
+  })
   
+  it('should take in "/n" as a delimiter', () => {
+    expect(sc.add("1\n2,3")).toEqual(6);
+  })
   
-
+  it('should support any delimiter', () => {
+    expect(sc.add("//;\n1;2")).toEqual(3);
+  })
+  
+  it('should take throw an exception negatives not allowed when passed a negative  number', () => {
+    expect(sc.add("1,-2,4")).toEqual("No negatives allowed: -2");
+    expect(sc.add("1,-2,-4")).toEqual("No negatives allowed: -2, -4");
+  })
   
 });

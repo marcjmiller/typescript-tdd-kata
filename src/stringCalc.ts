@@ -1,37 +1,42 @@
 export class StringCalc {
-  private total = 0;
+ 
+  add(input: string = "0") {
+    let result = 0;
+    let delimiter: string | RegExp = /[,\n]/;
 
-  add(input: string) {
-    if (input.length > 0) {
-      const inputSplit = this.splitInput(input);
-      inputSplit.forEach((value) => (this.total += value));
+    if (input.includes("-")) {
+      console.log(this.findNeg(input))
+      
+      // return "No negatives allowed: -" + firstNeg;
     }
 
-    return this.total;
+    if (input.startsWith("//")) {
+      delimiter = input.charAt(2);
+      input = input.substring(4);
+    }
+
+    input.split(delimiter).forEach((numInput) => (result += +numInput));
+
+    return result;
   }
 
-  splitInput(input: string): number[] {
-    let defaultDelim = /[,\n]/ 
-    if (input.startsWith('//')) {
-      const delim = this.getDelim(input);
-    }
-    if (!delim) {
-      const inputAsArray = input.split(/[,\n]/);
-    } else {
-      const inputAsArray = input.split(delim)
-    }
-    const output: number[] = [];
-      // get delimiter(s) const delim
-      //inputAsArray.forEach((stringValue) => if value!= delim output.push(+stringValue));
-      //else
+  anotherWay() {
+
+    let nums = [12,2,3,4,5,8]
+
+    nums.forEach((num, index) => {console.log(index)})
     
-    inputAsArray.forEach((stringValue) => output.push(+stringValue));
-    return output;
-
-
+    for (let num in nums) {
+      console.log(num)  
+    }
   }
 
-  getDelim(input: string) {
-    return input[2];
+  findNeg(input: string, negs: number[] = []) {
+    if (!input.includes("-")) {
+      return negs;
+    }
+    let firstNeg = input.charAt(input.indexOf("-") + 1);
+    negs.push(+firstNeg);
+    this.findNeg(input.substring(input.indexOf("-") + 2), negs)
   }
 }
